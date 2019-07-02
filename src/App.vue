@@ -30,4 +30,21 @@
     }
   }
 }
+ul{
+  padding: 0;
+  li{
+    list-style: none;
+    margin: 0.25em;
+    border-radius: 1em;
+    padding: 0.5em;
+    font-weight: bold;
+  }
+}
+ul.c li{
+  background: slategray;
+  color: wheat;
+}
+ul.u li{
+  background: gold;
+}
 </style>

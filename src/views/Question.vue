@@ -12,7 +12,7 @@
             <h4>好的，已经选出适合你的职业！</h4>
             <button @click="restart">再来一次</button>
         </div>
-        <div v-if="usable">
+        <div v-if="usable.length">
             <h3>适合你的职业</h3>
             <ul class="u">
                 <li v-for="item in usable">{{ item }}</li>
@@ -104,21 +104,5 @@
 </script>
 
 <style lang="less" scoped>
-    ul{
-        padding: 0;
-        li{
-            list-style: none;
-            margin: 0.25em;
-            border-radius: 1em;
-            padding: 0.5em;
-            font-weight: bold;
-        }
-    }
-    ul.c li{
-        background: slategray;
-        color: wheat;
-    }
-    ul.u li{
-        background: gold;
-    }
+
 </style>

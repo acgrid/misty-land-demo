@@ -15,6 +15,11 @@ export default new Router({
       path: '/question',
       name: 'question',
       component: () => import(/* webpackChunkName: "question" */ './views/Question.vue')
+    },
+    {
+      path: '/quiz',
+      name: 'quiz',
+      component: () => import(/* webpackChunkName: "quiz" */ './views/Quiz.vue')
     }
   ]
 })
