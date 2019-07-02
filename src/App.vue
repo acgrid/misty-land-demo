@@ -12,6 +12,8 @@
 </template>
 
 <style lang="less">
+@import "./assets/font.less";
+.ext-font("MZDL", "//misty-land-1253523747.file.myqcloud.com/font/");
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

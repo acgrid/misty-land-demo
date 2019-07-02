@@ -1,25 +1,23 @@
 <template>
     <div>
-        <div v-if="!loaded">加载中</div>
-        <div v-show="loaded">
-            <div class="img-container" style="position: relative; background: transparent top center no-repeat; background-size: contain" :style="{backgroundImage: powerImage}">
-                <img :src="tachie" alt="角色立绘" class="full-width" @load="loaded = true" />
-                <span class="text-land name" style="width: 1em; top: 1%; left: 10%; position: absolute"></span>
+        <div v-show="loaded" class="img-container" style="position: relative; background: transparent top center no-repeat; background-size: contain" :style="{backgroundImage: powerImage}">
+            <img :src="tachie" alt="角色立绘" class="full-width" @load="loaded = true" />
+            <span class="text-land">{{ character.n }}</span>
+        </div>
+        <div v-if="!loaded">加载立绘中</div>
+        <p><a @click="$router.back()">返回</a></p>
+        <div style="text-align: left">
+            <p>【阵营】<span class="nation">{{ powerName }}</span></p>
+            <p>【介绍】<span class="description"> {{ character.d }}</span></p>
+            <div class="weui-flex">
+                <div class="weui-flex__item">【人设】<span class="illustrator">{{ character.e }}</span></div>
+                <div class="weui-flex__item">【CV】<span class="cv">{{ character.cv }}</span></div>
             </div>
-            <p><a @click="$router.back()">返回</a></p>
-            <div style="text-align: left">
-                <p>【阵营】<span class="nation">{{ powerName }}</span></p>
-                <p>【介绍】<span class="description"> {{ character.d }}</span></p>
-                <div class="weui-flex">
-                    <div class="weui-flex__item">【人设】<span class="illustrator">{{ character.e }}</span></div>
-                    <div class="weui-flex__item">【CV】<span class="cv">{{ character.cv }}</span></div>
-                </div>
-                <blockquote>
-                    <audio :src="audio" ref="audio" @ended="playing = false" @playing="playing = true"></audio>
-                    <a class="speech" :class="{active: playing}" @click="playSpeech">&#9654; 播放</a>
-                    <span class="dialog">{{ character.s }}</span>
-                </blockquote>
-            </div>
+            <blockquote>
+                <audio :src="audio" ref="audio" @ended="playing = false" @playing="playing = true"></audio>
+                <a class="speech" :class="{active: playing}" @click="playSpeech">&#9654; 播放</a>
+                <span class="dialog">{{ character.s }}</span>
+            </blockquote>
         </div>
     </div>
 </template>
@@ -95,5 +93,13 @@
                 color: gray;
             }
         }
+    }
+    .text-land{
+        font-family: "MZDL", sans-serif;
+        font-size: 1.5em;
+        width: 1em;
+        top: 1%;
+        left: 10%;
+        position: absolute;
     }
 </style>

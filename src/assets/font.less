@@ -1,0 +1,12 @@
+.ext-font(@name, @prefix) {
+  @font-face {
+    font-family: @name;
+    src: url("@{prefix}@{name}.eot");
+    src: url("@{prefix}@{name}.eot#iefix") format("embedded-opentype"),
+    url("@{prefix}@{name}.woff") format("woff"),
+    url("@{prefix}@{name}.ttf") format("truetype"),
+    url("@{prefix}@{name}.svg#name") format("svg");
+    font-style: normal;
+    font-weight: normal;
+  }
+}
