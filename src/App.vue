@@ -25,6 +25,16 @@
 #nav {
   padding: 30px;
 }
+button{
+  display: block;
+  border: slategray 2px solid;
+  background: #eee;
+  padding: 0.5em;
+  margin: 0.5em 0;
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 5em;
+}
 a {
   font-weight: bold;
   color: #2c3e50;

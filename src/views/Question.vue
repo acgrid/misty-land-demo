@@ -13,7 +13,7 @@
             <button @click="restart">再来一次</button>
         </div>
         <div v-if="usable.length">
-            <h3>适合你的职业</h3>
+            <h3>适合你的职业一览</h3>
             <ul class="u">
                 <li v-for="item in usable">
                     <router-link :to="{name: 'character', params: {id: item}}">
@@ -117,11 +117,14 @@
 <style lang="less" scoped>
     ul.u{
         padding: 0.5em 0;
+        display: flex;
         li{
+            width: 20%;
+            padding-left: 0.2%;
             list-style: none;
             text-align: center;
             img{
-                max-width: 50%;
+                max-width: 100%;
                 box-shadow: 2px 2px 3px #cccccc;
             }
             p{
@@ -134,6 +137,9 @@
                 &:visited{
                     color: orange;
                 }
+            }
+            &:first-child{
+                padding-left: 0;
             }
         }
     }
