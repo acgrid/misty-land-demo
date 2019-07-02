@@ -15,7 +15,12 @@
         <div v-if="usable.length">
             <h3>适合你的职业</h3>
             <ul class="u">
-                <li v-for="item in usable">{{ characters[item].n }}</li>
+                <li v-for="item in usable">
+                    <router-link :to="{name: 'character', params: {id: item}}">
+                        <img :src="icon(item)" alt="角色头像" />
+                        <p>{{ characters[item].n }}</p>
+                    </router-link>
+                </li>
             </ul>
         </div>
     </div>
@@ -23,6 +28,7 @@
 
 <script>
     import characters from '../settings/character';
+    import {CLOUD} from "../settings/cloud";
     const questions = [
         {q: "如果必经之路上出现了一块大石挡路，你会怎么办？", t: "性格", c:[
                 {a: "打碎它", u: [1, 3]},
@@ -100,11 +106,35 @@
                 if(index < questions[this.step].c.length){
                     this.choices.push(index);
                 }
+            },
+            icon(id){
+                return `${CLOUD}/icon/${id}.png`;
             }
         }
     }
 </script>
 
 <style lang="less" scoped>
-
+    ul.u{
+        padding: 0.5em 0;
+        li{
+            list-style: none;
+            text-align: center;
+            img{
+                max-width: 50%;
+                box-shadow: 2px 2px 3px #cccccc;
+            }
+            p{
+                margin: 0 0 0.5em 0;
+            }
+            a{
+                &:link{
+                    color: #42b983;
+                }
+                &:visited{
+                    color: orange;
+                }
+            }
+        }
+    }
 </style>

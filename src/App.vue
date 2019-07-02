@@ -18,19 +18,26 @@
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  padding: 0 0.5em;
 }
 #nav {
   padding: 30px;
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-    text-decoration: none;
-    &.router-link-exact-active {
-      color: #42b983;
-    }
+}
+a {
+  font-weight: bold;
+  color: #2c3e50;
+  text-decoration: none;
+  &.router-link-exact-active{
+    color: #42b983;
+  }
+  &:hover{
+    color: green;
+  }
+  &:active{
+    color: orangered;
   }
 }
-ul{
+ul.c{
   padding: 0;
   li{
     list-style: none;
@@ -38,13 +45,8 @@ ul{
     border-radius: 1em;
     padding: 0.5em;
     font-weight: bold;
+    background: slategray;
+    color: wheat;
   }
-}
-ul.c li{
-  background: slategray;
-  color: wheat;
-}
-ul.u li{
-  background: gold;
 }
 </style>

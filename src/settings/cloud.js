@@ -1,0 +1,1 @@
+export const CLOUD = 'http://misty-land-1253523747.file.myqcloud.com';
