@@ -2,7 +2,7 @@
   <div id="app">
     <div id="nav">
       <router-link to="/">认识世界</router-link> |
-      <router-link to="/quiz">走出新手村</router-link> |
+      <router-link to="/quiz">新人任务</router-link> |
       <router-link to="/question">创造者之问</router-link>
     </div>
     <keep-alive>
