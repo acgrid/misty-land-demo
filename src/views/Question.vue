@@ -10,7 +10,14 @@
         </div>
         <div v-else>
             <h4>好的，已经选出适合你的职业！</h4>
-            <button @click="restart">再来一次</button>
+            <!--<button @click="restart">再来一次</button>-->
+        </div>
+        <div v-if="chosen">
+            <h3>你已选择的职业</h3>
+            <router-link :to="{name: 'character', params: {id: chosen}}">
+                <img :src="icon(chosen)" alt="角色头像" />
+                <p>{{ characters[chosen].n }}</p>
+            </router-link>
         </div>
         <div v-if="usable.length">
             <h3>适合你的职业一览</h3>
@@ -29,6 +36,9 @@
 <script>
     import characters from '../settings/character';
     import {CLOUD} from "../settings/cloud";
+    import store from '../store';
+    import {ANSWER_QUESTIONS} from "../mutations";
+
     const questions = [
         {q: "如果必经之路上出现了一块大石挡路，你会怎么办？", t: "性格", c:[
                 {a: "打碎它", u: [1, 3]},
@@ -61,54 +71,65 @@
     ];
     export default {
         name: "Question",
+        beforeRouteEnter(to, from, next){
+            next(store.state.quizPassed ? undefined : {name: 'home'});
+        },
         data() {
             return {
-                choices: [],
+                answers: this.$store.state.answers.slice(),
                 characters
             };
         },
         computed: {
-            step: function () {
-                return this.choices.length;
+            step() {
+                return this.answers.length;
             },
-            ended: function(){
+            ended(){
                 return this.step >= questions.length;
             },
-            title: function(){
+            title(){
                 return questions[this.step].t;
             },
-            question: function(){
+            question(){
                 return questions[this.step].q;
             },
-            options: function(){
+            options(){
                 return questions[this.step].c.map(choice => choice.a);
             },
-            usable: function () {
+            usable() {
                 return questions.slice(0, this.step).reduce((usable, question, index) => {
-                    if(this.choices[index] < questions[index].c.length){
-                        questions[index].c[this.choices[index]].u.forEach(item => {
+                    if(this.answers[index] < questions[index].c.length){
+                        questions[index].c[this.answers[index]].u.forEach(item => {
                             if(usable.indexOf(item) === -1) usable.push(item);
                         })
                     }
                     return usable;
                 }, []);
+            },
+            chosen(){
+                return this.$store.state.characterChosen;
             }
         },
         methods: {
             restart: function(){
-                this.choices.splice(0);
+                this.answers.splice(0);
             },
             back: function(){
-                if(this.step > 0) this.choices.splice(this.step - 1);
+                if(this.step > 0) this.answers.splice(this.step - 1);
             },
             answer: function(index){
                 if(this.ended) return;
                 if(index < questions[this.step].c.length){
-                    this.choices.push(index);
+                    this.answers.push(index);
                 }
             },
             icon(id){
                 return `${CLOUD}/icon/${id}.png`;
+            }
+        },
+        watch: {
+            answers(){
+                this.$store.commit(ANSWER_QUESTIONS, this.answers);
             }
         }
     }

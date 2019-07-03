@@ -5,7 +5,6 @@
             <span class="text-land">{{ character.n }}</span>
         </div>
         <div v-if="!loaded">加载立绘中</div>
-        <p><a @click="$router.back()">返回</a></p>
         <div style="text-align: left">
             <p>【阵营】<span class="nation">{{ powerName }}</span></p>
             <p>【介绍】<span class="description"> {{ character.d }}</span></p>
@@ -19,6 +18,8 @@
                 <span class="dialog">{{ character.s }}</span>
             </blockquote>
         </div>
+        <button v-if="!chosen" @click="choose">选择我</button>
+        <a class="button" @click="$router.back()">返回</a>
     </div>
 </template>
 
@@ -26,6 +27,7 @@
     import powers from '../settings/power';
     import characters from '../settings/character';
     import {CLOUD} from "../settings/cloud";
+    import {CHOOSE_CHARACTER} from "../mutations";
 
     export default {
         name: "Character",
@@ -57,10 +59,17 @@
             powerImage(){
                 return `url(${CLOUD}/power/${this.id}s.png)`;
             },
+            chosen(){
+                return this.$store.state.characterChosen;
+            }
         },
         methods: {
             playSpeech(){
                 if(!this.playing) this.$refs.audio.play();
+            },
+            choose(){
+                this.$store.commit(CHOOSE_CHARACTER, this.id);
+                this.$router.back();
             }
         },
         watch: {
@@ -82,6 +91,10 @@
         margin: 1em 0;
         padding-left: 1em;
         border-left: dimgray solid 4px;
+    }
+    button{
+        background: #42b983;
+        font-size: 1.25em;
     }
     a.speech{
         margin-right: 0.5em;

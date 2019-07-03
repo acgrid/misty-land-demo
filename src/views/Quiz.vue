@@ -1,5 +1,6 @@
 <template>
     <div>
+        <router-link class="button" v-if="everPassed && !passed" :to="{name: 'question'}">曾经完成过，点击跳过</router-link>
         <progress :value="step" :max="quantity"></progress>
         <div v-if="running">
             <p>Q<span>{{ step + 1 }}</span>: {{ question }}</p>
@@ -10,13 +11,16 @@
         </div>
         <div v-else>
             <h4>你答对了<b>{{ right }}</b>题，得<b :class="passed ? 'pass' : 'fail'">{{ score }}</b>分</h4>
-            <h3 v-if="passed">可以走出新手村，开始征程了！</h3>
+            <router-link class="button" v-if="passed" :to="{name: 'question'}">可以走出新手村，开始征程了！</router-link>
             <button v-else @click="start">再来一次</button>
         </div>
     </div>
 </template>
 
 <script>
+    import {PASS_QUIZ} from "../mutations";
+    import store from '../store';
+
     function shuffled(arr) {
         const dup = arr.slice();
         let i = dup.length;
@@ -50,6 +54,9 @@
     ];
     export default {
         name: "Quiz",
+        beforeRouteEnter(to, from, next){
+            next(store.state.tutorialRead ? undefined : {name: 'home'});
+        },
         data(){
             return {
                 quantity: 10,
@@ -90,6 +97,9 @@
             },
             passed(){
                 return this.right >= this.pass;
+            },
+            everPassed() {
+                return this.$store.state.quizPassed;
             }
         },
         methods: {
@@ -103,6 +113,7 @@
             },
             answer(answer){
                 if(this.running) this.answers.push(answer);
+                if(!this.running && this.passed) this.$store.commit(PASS_QUIZ);
             },
             back(){
                 if(this.running) this.answers.splice(this.step - 1);
