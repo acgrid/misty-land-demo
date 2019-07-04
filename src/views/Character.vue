@@ -6,8 +6,8 @@
         </div>
         <div v-if="!loaded">加载立绘中</div>
         <div style="text-align: left">
-            <p>【阵营】<span class="nation">{{ powerName }}</span></p>
-            <p>【介绍】<span class="description"> {{ character.d }}</span></p>
+            <div>【阵营】<span class="nation">{{ powerName }}</span></div>
+            <div>【介绍】<span class="description"> {{ character.d }}</span></div>
             <div class="weui-flex">
                 <div class="weui-flex__item">【人设】<span class="illustrator">{{ character.e }}</span></div>
                 <div class="weui-flex__item">【CV】<span class="cv">{{ character.cv }}</span></div>
@@ -18,7 +18,8 @@
                 <span class="dialog">{{ character.s }}</span>
             </blockquote>
         </div>
-        <button v-if="!chosen" @click="choose">选择我</button>
+        <button v-if="!chosen" @click="choose">选择我，开启征程</button>
+        <p class="center">选择后请找新手村NPC领取任务手册</p>
         <a class="button" @click="$router.back()">返回</a>
     </div>
 </template>
@@ -69,7 +70,7 @@
             },
             choose(){
                 this.$store.commit(CHOOSE_CHARACTER, this.id);
-                this.$router.back();
+                this.$router.push({name: 'quiz'});
             }
         },
         watch: {

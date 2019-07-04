@@ -1,19 +1,25 @@
 <template>
     <div>
-        <router-link class="button" v-if="everPassed && !passed" :to="{name: 'question'}">曾经完成过，点击跳过</router-link>
-        <progress :value="step" :max="quantity"></progress>
-        <div v-if="running">
-            <p>Q<span>{{ step + 1 }}</span>: {{ question }}</p>
-            <ul class="c">
-                <li v-for="option in options" @click="answer(option)">{{ option }}</li>
-            </ul>
-            <p v-if="step > 0"><button @click="back">上一问</button></p>
+        <h2>走出新手村</h2>
+        <p>九龙帝国因为域内有九个天地气穴而得名，相传如果能在气穴中修炼，将会拥有超过常人的能力。九大气穴能力各不相同，几千年来，气穴由几大家族势力分别守护，每隔十年都将举办一场比武大会，胜利者将有资格造访所有气穴。比武大会又被称为“九龙之争”，大会已成为九龙国的传统，每次大会，各大家族，江湖门派，九龙国之外的势力都会派人参与。大会历史悠久，哪怕中间发生战争、朝代更替，也不曾中断过。</p>
+        <p>你想去参加大会，但是长老显然觉得你还太嫩；</p>
+        <blockquote>长老：想出山，先来考你几个问题，答上来了才能让你去参加九龙之争；<br />&nbsp;&nbsp;我出10道题，及格了方算过关。</blockquote>
+        <div v-if="!skip">
+            <progress :value="step" :max="quantity"></progress>
+            <div v-if="running">
+                <h3>Q<span>{{ step + 1 }}</span>: {{ question }}</h3>
+                <ul class="c">
+                    <li v-for="option in options" @click="answer(option)">{{ option }}</li>
+                </ul>
+                <p v-if="step > 0"><button @click="back">上一问</button></p>
+                <p class="center">提示来自雾之大陆设定集，新手任务墙</p>
+            </div>
+            <div v-else>
+                <h4>你答对了<b>{{ right }}</b>题，得<b :class="passed ? 'pass' : 'fail'">{{ score }}</b>分</h4>
+                <button v-if="!passed" @click="start">再来一次</button>
+            </div>
         </div>
-        <div v-else>
-            <h4>你答对了<b>{{ right }}</b>题，得<b :class="passed ? 'pass' : 'fail'">{{ score }}</b>分</h4>
-            <router-link class="button" v-if="passed" :to="{name: 'question'}">可以走出新手村，开始征程了！</router-link>
-            <button v-else @click="start">再来一次</button>
-        </div>
+        <p v-if="skip">你的知识水平得到了认可。九龙之争各路势力都已经混杂其中，我们派了密探去打探信息；如果遇到困难你们可以互相照应，多去<b>【酒馆】</b>打听，那边消息比较灵通，不过人员也很复杂，总之自己小心。</p>
     </div>
 </template>
 
@@ -55,7 +61,7 @@
     export default {
         name: "Quiz",
         beforeRouteEnter(to, from, next){
-            next(store.state.tutorialRead ? undefined : {name: 'home'});
+            next(store.state.characterChosen ? undefined : {name: 'home'});
         },
         data(){
             return {
@@ -100,6 +106,9 @@
             },
             everPassed() {
                 return this.$store.state.quizPassed;
+            },
+            skip(){
+                return this.everPassed || this.passed;
             }
         },
         methods: {

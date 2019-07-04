@@ -1,8 +1,10 @@
 <template>
     <div>
+        <h2>创造者之问</h2>
         <div v-if="!ended">
-            <h3>{{ title }}之问</h3>
-            <p>{{ question }}</p>
+            <p>我是雾之大陆的创造者，接下来将向你提出四个问题，这几个问题将决定是你成为一个什么样的人，从而降临到雾之大陆。</p>
+            <h5>{{ title }}——</h5>
+            <h4>{{ question }}</h4>
             <ul class="c">
                 <li v-for="(option, index) in options" @click="answer(index)">{{ option }}</li>
             </ul>
@@ -18,17 +20,20 @@
                 <img :src="icon(chosen)" alt="角色头像" />
                 <p>{{ characters[chosen].n }}</p>
             </router-link>
+            <router-link class="button" :to="{name: 'quiz'}">走出新手村</router-link>
         </div>
         <div v-if="usable.length">
-            <h3>适合你的职业一览</h3>
+            <h3>你也许是一名</h3>
             <ul class="u">
                 <li v-for="item in usable">
                     <router-link :to="{name: 'character', params: {id: item}}">
                         <img :src="icon(item)" alt="角色头像" />
-                        <p>{{ characters[item].n }}</p>
+                        <div>{{ characters[item].n }}</div>
                     </router-link>
                 </li>
             </ul>
+            <h5>点击角色，了解并选择</h5>
+            <p v-if="ended">不同的职业角色，竞技场技能不同，想事先了解技能用途，请观察新手任务墙。</p>
         </div>
     </div>
 </template>
@@ -40,39 +45,39 @@
     import {ANSWER_QUESTION, UNDO_ANSWER, CLEAR_ANSWERS} from "../mutations";
 
     const questions = [
-        {q: "如果必经之路上出现了一块大石挡路，你会怎么办？", t: "性格", c:[
+        {q: "如果必经之路上出现了一块大石挡路，你会怎么办？", t: "人物的性格", c:[
                 {a: "打碎它", u: [1, 3]},
                 {a: "飞过去", u: [4]},
                 {a: "把石头移走", u: [10]},
                 {a: "闪现过去", u: [6]},
-                {a: "找人帮忙", u: [5, 7]}
+                {a: "找伙伴一起解决它", u: [5, 7]}
             ]},
-        {q: "如果任务途中，遇到一位女子求助想与你同行，你会怎么办？", t: "观点", c: [
+        {q: "如果任务途中，遇到一位女子求助想与你同行，你会怎么办？", t: "对事物的观点", c: [
                 {a: "给她一些必须品后离开", u: [8]},
                 {a: "杀了她", u: [2]},
                 {a: "与她同行", u: [5, 4]},
                 {a: "询问她的情况并给出相应帮助", u: [7]},
                 {a: "无视", u: [6, 9]}
             ]},
-        {q: "经历一番艰辛，找到了宝箱，你觉得里面会是什么？", t: "追求", c: [
-                {a: "一把武器", u: [1]},
+        {q: "经历一番艰辛，找到了宝箱，你觉得里面会是什么？", t: "人生的追求", c: [
+                {a: "绝世武器", u: [1]},
                 {a: "一张新藏宝图", u: [8]},
                 {a: "一本秘籍", u: [10]},
-                {a: "想找的答案", u: [3, 9]},
+                {a: "一直想找的答案", u: [3, 9]},
                 {a: "危险", u: [2]}
             ]},
         {q: "你对神怎么看？", t: "信仰", c: [
-                {a: "他一定是曾经的最强者", u: [9, 10]},
+                {a: "它们是曾经的最强者", u: [9, 10]},
                 {a: "没有神", u: [7, 8]},
-                {a: "并不容易让你碰到神", u: [6, 5]},
+                {a: "很神秘，平时碰不到", u: [6, 5]},
                 {a: "我就是神", u: [1, 2]},
-                {a: "我们的先祖成为了神", u: [4, 3]}
+                {a: "神是我们的先祖", u: [4, 3]}
             ]}
     ];
     export default {
         name: "Question",
         beforeRouteEnter(to, from, next){
-            next(store.state.quizPassed ? undefined : {name: 'home'});
+            next(store.state.tutorialRead ? undefined : {name: 'home'});
         },
         data() {
             return {
@@ -131,6 +136,10 @@
 </script>
 
 <style lang="less" scoped>
+    h5{
+        font-size: small;
+        font-style: italic;
+    }
     ul.u{
         padding: 0.5em 0;
         display: flex;

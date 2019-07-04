@@ -56,4 +56,12 @@ ul.c{
     color: wheat;
   }
 }
+p{
+  text-indent: 2em;
+  text-align: left;
+}
+.center{
+  text-indent: 0;
+  text-align: center;
+}
 </style>
