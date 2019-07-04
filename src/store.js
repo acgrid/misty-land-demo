@@ -7,7 +7,7 @@ const TUTORIAL = 't';
 const QUIZ = 'q';
 const ANSWERS = 'a';
 const CHARACTER = 'c';
-import {RESET, READ_TUTORIAL, PASS_QUIZ, ANSWER_QUESTIONS, CHOOSE_CHARACTER} from "./mutations";
+import {RESET, READ_TUTORIAL, PASS_QUIZ, ANSWER_QUESTION, UNDO_ANSWER, CLEAR_ANSWERS, CHOOSE_CHARACTER} from "./mutations";
 
 function get(key){
   try{
@@ -45,13 +45,24 @@ export default new Vuex.Store({
     [PASS_QUIZ](state){
       state.quizPassed = set(QUIZ, true);
     },
-    [ANSWER_QUESTIONS](state, answers){
-      state.answers = set(ANSWERS, answers);
+    [ANSWER_QUESTION](state, answer){
+      state.answers.push(answer);
+      set(ANSWERS, state.answers);
+    },
+    [UNDO_ANSWER](state){
+      if(state.answers.length){
+        state.answers.splice(state.answers.length - 1);
+        set(ANSWERS, state.answers);
+      }
+    },
+    [CLEAR_ANSWERS](state){
+      state.answers.splice(0);
+      set(ANSWERS, state.answers);
     },
     [CHOOSE_CHARACTER](state, character){
       state.characterChosen = set(CHARACTER, character);
     },
-    [RESET](state){
+    [RESET](){
       localStorage.clear();
       this.replaceState(init());
     }

@@ -37,7 +37,7 @@
     import characters from '../settings/character';
     import {CLOUD} from "../settings/cloud";
     import store from '../store';
-    import {ANSWER_QUESTIONS} from "../mutations";
+    import {ANSWER_QUESTION, UNDO_ANSWER, CLEAR_ANSWERS} from "../mutations";
 
     const questions = [
         {q: "如果必经之路上出现了一块大石挡路，你会怎么办？", t: "性格", c:[
@@ -76,11 +76,13 @@
         },
         data() {
             return {
-                answers: this.$store.state.answers.slice(),
                 characters
             };
         },
         computed: {
+            answers(){
+                return this.$store.state.answers;
+            },
             step() {
                 return this.answers.length;
             },
@@ -88,13 +90,13 @@
                 return this.step >= questions.length;
             },
             title(){
-                return questions[this.step].t;
+                return this.ended ? undefined : questions[this.step].t;
             },
             question(){
-                return questions[this.step].q;
+                return this.ended ? undefined : questions[this.step].q;
             },
             options(){
-                return questions[this.step].c.map(choice => choice.a);
+                return this.ended ? undefined : questions[this.step].c.map(choice => choice.a);
             },
             usable() {
                 return questions.slice(0, this.step).reduce((usable, question, index) => {
@@ -112,24 +114,17 @@
         },
         methods: {
             restart: function(){
-                this.answers.splice(0);
+                this.$store.commit(CLEAR_ANSWERS);
             },
             back: function(){
-                if(this.step > 0) this.answers.splice(this.step - 1);
+                this.$store.commit(UNDO_ANSWER);
             },
             answer: function(index){
                 if(this.ended) return;
-                if(index < questions[this.step].c.length){
-                    this.answers.push(index);
-                }
+                if(index < questions[this.step].c.length) this.$store.commit(ANSWER_QUESTION, index);
             },
             icon(id){
                 return `${CLOUD}/icon/${id}.png`;
-            }
-        },
-        watch: {
-            answers(){
-                this.$store.commit(ANSWER_QUESTIONS, this.answers);
             }
         }
     }
