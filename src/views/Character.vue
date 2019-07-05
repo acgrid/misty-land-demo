@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="character">
         <div v-show="loaded" class="img-container" style="position: relative; background: transparent top center no-repeat; background-size: contain" :style="{backgroundImage: powerImage}">
             <img :src="tachie" alt="角色立绘" class="full-width" @load="loaded = true" />
             <span class="text-land">{{ character.n }}</span>
@@ -19,7 +19,6 @@
             </blockquote>
         </div>
         <button v-if="!chosen" @click="choose">选择我，开启征程</button>
-        <p class="center">选择后请找新手村NPC领取任务手册</p>
         <a class="button" @click="$router.back()">返回</a>
     </div>
 </template>
@@ -45,6 +44,9 @@
             character(){
                 return characters[this.id];
             },
+            name(){
+                return this.character && this.character.n;
+            },
             tachie(){
                 return `${CLOUD}/tachie/${this.id}.png`;
             },
@@ -58,7 +60,7 @@
                 return this.power.name;
             },
             powerImage(){
-                return `url(${CLOUD}/power/${this.id}s.png)`;
+                return `url(${CLOUD}/power/${this.power.id}s.png)`;
             },
             chosen(){
                 return this.$store.state.characterChosen;
@@ -70,7 +72,7 @@
             },
             choose(){
                 this.$store.commit(CHOOSE_CHARACTER, this.id);
-                this.$router.push({name: 'quiz'});
+                this.$router.push({name: 'pre-quiz'});
             }
         },
         watch: {

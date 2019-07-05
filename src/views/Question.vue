@@ -3,7 +3,7 @@
         <h2>创造者之问</h2>
         <div v-if="!ended">
             <p>我是雾之大陆的创造者，接下来将向你提出四个问题，这几个问题将决定是你成为一个什么样的人，从而降临到雾之大陆。</p>
-            <h5>{{ title }}——</h5>
+            <h3>- {{ title }} -</h3>
             <h4>{{ question }}</h4>
             <ul class="c">
                 <li v-for="(option, index) in options" @click="answer(index)">{{ option }}</li>
@@ -15,11 +15,8 @@
             <!--<button @click="restart">再来一次</button>-->
         </div>
         <div v-if="chosen">
-            <h3>你已选择的职业</h3>
-            <router-link :to="{name: 'character', params: {id: chosen}}">
-                <img :src="icon(chosen)" alt="角色头像" />
-                <p>{{ characters[chosen].n }}</p>
-            </router-link>
+            <h3>你已经成为一名</h3>
+            <CharacterIcon :id="chosen" style="width: 40%; margin: 0 auto;"></CharacterIcon>
             <router-link class="button" :to="{name: 'quiz'}">走出新手村</router-link>
         </div>
         <div v-if="usable.length">
@@ -43,6 +40,7 @@
     import {CLOUD} from "../settings/cloud";
     import store from '../store';
     import {ANSWER_QUESTION, UNDO_ANSWER, CLEAR_ANSWERS} from "../mutations";
+    import CharacterIcon from "../components/CharacterIcon";
 
     const questions = [
         {q: "如果必经之路上出现了一块大石挡路，你会怎么办？", t: "人物的性格", c:[
@@ -76,6 +74,7 @@
     ];
     export default {
         name: "Question",
+        components: {CharacterIcon},
         beforeRouteEnter(to, from, next){
             next(store.state.tutorialRead ? undefined : {name: 'home'});
         },
@@ -136,9 +135,9 @@
 </script>
 
 <style lang="less" scoped>
-    h5{
-        font-size: small;
-        font-style: italic;
+    h3{
+        margin-top: 2em;
+        color: orangered;
     }
     ul.u{
         padding: 0.5em 0;

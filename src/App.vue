@@ -25,10 +25,12 @@ button, a.button{
   border: slategray 2px solid;
   background: #eee;
   padding: 0.5em;
-  margin: 0.5em 0;
+  margin: 0.75em 0;
   width: 100%;
   box-sizing: border-box;
-  border-radius: 5em;
+  border-radius: 2.5em;
+  font-size: 1.25em;
+  font-weight: bold;
 }
 a {
   font-weight: bold;

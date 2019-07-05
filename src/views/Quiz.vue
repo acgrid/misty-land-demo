@@ -1,10 +1,16 @@
 <template>
     <div>
-        <h2>走出新手村</h2>
+        <div v-if="chosen">
+            <h2>你已经成为一名</h2>
+            <CharacterIcon :id="chosen" style="width: 50%; margin: 0 auto;"></CharacterIcon>
+        </div>
+        <h2>九龙之争故事背景</h2>
         <p>九龙帝国因为域内有九个天地气穴而得名，相传如果能在气穴中修炼，将会拥有超过常人的能力。九大气穴能力各不相同，几千年来，气穴由几大家族势力分别守护，每隔十年都将举办一场比武大会，胜利者将有资格造访所有气穴。比武大会又被称为“九龙之争”，大会已成为九龙国的传统，每次大会，各大家族，江湖门派，九龙国之外的势力都会派人参与。大会历史悠久，哪怕中间发生战争、朝代更替，也不曾中断过。</p>
+        <h2>走出新手村</h2>
         <p>你想去参加大会，但是长老显然觉得你还太嫩；</p>
-        <blockquote>长老：想出山，先来考你几个问题，答上来了才能让你去参加九龙之争；<br />&nbsp;&nbsp;我出10道题，及格了方算过关。</blockquote>
-        <div v-if="!skip">
+        <blockquote>长老：想出山，先来考你几个问题，答上来了才能让你去参加九龙之争；我出10道题，及格了方算过关。</blockquote>
+        <hr />
+        <div v-if="!everPassed">
             <progress :value="step" :max="quantity"></progress>
             <div v-if="running">
                 <h3>Q<span>{{ step + 1 }}</span>: {{ question }}</h3>
@@ -19,13 +25,17 @@
                 <button v-if="!passed" @click="start">再来一次</button>
             </div>
         </div>
-        <p v-if="skip">你的知识水平得到了认可。九龙之争各路势力都已经混杂其中，我们派了密探去打探信息；如果遇到困难你们可以互相照应，多去<b>【酒馆】</b>打听，那边消息比较灵通，不过人员也很复杂，总之自己小心。</p>
+        <div v-if="skip">
+            <p style="color: orangered; font-size: large">你的知识水平得到了认可，在新手村NPC那里交任务吧。</p>
+            <blockquote>九龙之争各路势力都已经混杂其中，我们派了密探去打探信息；如果遇到困难你们可以互相照应，多去<b>【酒馆】</b>打听，那边消息比较灵通，不过人员也很复杂，总之自己小心。</blockquote>
+        </div>
     </div>
 </template>
 
 <script>
     import {PASS_QUIZ} from "../mutations";
     import store from '../store';
+    import CharacterIcon from "../components/CharacterIcon";
 
     function shuffled(arr) {
         const dup = arr.slice();
@@ -60,11 +70,13 @@
     ];
     export default {
         name: "Quiz",
+        components: {CharacterIcon},
         beforeRouteEnter(to, from, next){
             next(store.state.characterChosen ? undefined : {name: 'home'});
         },
         data(){
             return {
+                everPassed: this.$store.state.quizPassed, // not responsive
                 quantity: 10,
                 pass: 6,
                 questions: [],
@@ -72,6 +84,9 @@
             };
         },
         computed: {
+            chosen(){
+                return this.$store.state.characterChosen;
+            },
             step(){
                 return this.answers.length;
             },
@@ -104,9 +119,6 @@
             passed(){
                 return this.right >= this.pass;
             },
-            everPassed() {
-                return this.$store.state.quizPassed;
-            },
             skip(){
                 return this.everPassed || this.passed;
             }
@@ -121,8 +133,10 @@
                 this.answers.splice(0);
             },
             answer(answer){
-                if(this.running) this.answers.push(answer);
-                if(!this.running && this.passed) this.$store.commit(PASS_QUIZ);
+                if(this.running){
+                    this.answers.push(answer);
+                    if(this.passed) this.$store.commit(PASS_QUIZ);
+                }
             },
             back(){
                 if(this.running) this.answers.splice(this.step - 1);
@@ -145,4 +159,27 @@ b{
         color: orangered;
     }
 }
+    blockquote{
+        text-align: left;
+        font-style: italic;
+        margin: 0.5em 0;
+        padding-left: 2em;
+        position: relative;
+        &:before{
+            content: '“';
+            position: absolute;
+            top: 0;
+            left: 0.5em;
+            font-size: 2em;
+            color: orangered;
+        }
+        &:after{
+            content: '”';
+            position: absolute;
+            bottom: -0.5em;
+            right: 0.5em;
+            font-size: 2em;
+            color: orangered;
+        }
+    }
 </style>
